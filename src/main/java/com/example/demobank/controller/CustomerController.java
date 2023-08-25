@@ -1,5 +1,6 @@
 package com.example.demobank.controller;
 
+import com.example.demobank.entity.Customer;
 import com.example.demobank.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,11 @@ public class CustomerController {
     @GetMapping("all")
     public ResponseEntity<?> getCustomers(){
         return ResponseEntity.ok(customerService.getCustomers());
+    }
+
+    @PostMapping("create")
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer){
+        customerService.saveCustomer(customer);
+        return ResponseEntity.ok(customer);
     }
 }

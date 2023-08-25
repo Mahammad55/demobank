@@ -9,4 +9,6 @@ public interface CustomerService {
     Customer getCustomerById(Long id);
 
     List<Customer> getCustomers();
+
+    Customer saveCustomer(Customer customer);
 }
