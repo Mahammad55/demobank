@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CustomerServiceImpl implements CustomerService {
 
     CustomerRepository customerRepository;
@@ -23,10 +23,10 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getCustomerById(Long id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
 
-        if(optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             return optionalCustomer.get();
-        }else {
-            throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!",id));
+        } else {
+            throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
         }
     }
 
@@ -38,5 +38,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer updateCustomer(Long id, Customer customer) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            Customer newCustomer = optionalCustomer.get();
+
+            newCustomer.setName(customer.getName());
+            newCustomer.setSurname(customer.getSurname());
+            newCustomer.setCif(customer.getCif());
+            newCustomer.setIdNumber(customer.getIdNumber());
+
+            return customerRepository.save(newCustomer);
+        } else {
+            throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
+        }
     }
 }

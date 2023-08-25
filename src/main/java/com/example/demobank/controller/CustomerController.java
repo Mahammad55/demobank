@@ -21,13 +21,18 @@ public class CustomerController {
     }
 
     @GetMapping("all")
-    public ResponseEntity<?> getCustomers(){
+    public ResponseEntity<?> getCustomers() {
         return ResponseEntity.ok(customerService.getCustomers());
     }
 
     @PostMapping("create")
-    public ResponseEntity<?> createCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         customerService.saveCustomer(customer);
         return ResponseEntity.ok(customer);
+    }
+
+    @PutMapping("customerId/{id}")
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+        return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
 }
