@@ -56,4 +56,16 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
         }
     }
+
+    @Override
+    public boolean deleteCustomerById(Long id) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+
+        if (optionalCustomer.isPresent()) {
+            customerRepository.deleteById(id);
+            return true;
+        } else {
+            throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
+        }
+    }
 }

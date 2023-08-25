@@ -8,6 +8,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/customers")
 @RequiredArgsConstructor
@@ -34,5 +37,15 @@ public class CustomerController {
     @PutMapping("customerId/{id}")
     public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+        boolean deleted = false;
+        deleted = customerService.deleteCustomerById(id);
+
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("is deleted", deleted);
+        return ResponseEntity.ok(map);
     }
 }
