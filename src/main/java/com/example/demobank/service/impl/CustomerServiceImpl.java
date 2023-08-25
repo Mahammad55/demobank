@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +28,10 @@ public class CustomerServiceImpl implements CustomerService {
         }else {
             throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!",id));
         }
+    }
+
+    @Override
+    public List<Customer> getCustomers() {
+        return customerRepository.findAll();
     }
 }
