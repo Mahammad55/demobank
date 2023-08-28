@@ -5,6 +5,7 @@ import com.example.demobank.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +30,15 @@ public class CustomerController {
     }
 
     @GetMapping("name-surname")
-    public ResponseEntity<?> getCustomerByNameAndSurname(@RequestHeader("Name") String name,@RequestHeader("Surname") String surname){
+    public ResponseEntity<?> getCustomerByNameAndSurname(@RequestHeader("Name") String name, @RequestHeader("Surname") String surname) {
         return ResponseEntity.ok(customerService.findCustomerByNameAndSurname(name, surname));
     }
 
     @PostMapping("create")
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
+        customer.setActive(1);
         customerService.saveCustomer(customer);
-        return ResponseEntity.ok(customer);
+        return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
     @PutMapping("customerId/{id}")

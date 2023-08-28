@@ -50,6 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
             newCustomer.setSurname(customer.getSurname());
             newCustomer.setCif(customer.getCif());
             newCustomer.setIdNumber(customer.getIdNumber());
+            newCustomer.setActive(customer.getActive());
 
             return customerRepository.save(newCustomer);
         } else {
