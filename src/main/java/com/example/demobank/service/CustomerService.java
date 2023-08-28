@@ -15,4 +15,6 @@ public interface CustomerService {
     Customer updateCustomer(Long id, Customer customer);
 
     boolean deleteCustomerById(Long id);
+
+    Customer findCustomerByNameAndSurname(String name, String surname);
 }

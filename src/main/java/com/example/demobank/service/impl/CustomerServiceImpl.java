@@ -68,4 +68,9 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
         }
     }
+
+    @Override
+    public Customer findCustomerByNameAndSurname(String name, String surname) {
+        return customerRepository.findCustomerByNameAndSurname(name, surname);
+    }
 }
