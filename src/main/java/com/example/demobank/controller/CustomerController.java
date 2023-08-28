@@ -28,6 +28,11 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getCustomers());
     }
 
+    @GetMapping("name-surname")
+    public ResponseEntity<?> getCustomerByNameAndSurname(@RequestHeader("Name") String name,@RequestHeader("Surname") String surname){
+        return ResponseEntity.ok(customerService.findCustomerByNameAndSurname(name, surname));
+    }
+
     @PostMapping("create")
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         customerService.saveCustomer(customer);
