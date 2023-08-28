@@ -32,7 +32,7 @@ public class Customer {
     @Column(unique = true)
     String idNumber;
 
-    Integer active=1;
+    Integer active;
 
     @CreationTimestamp
     LocalDateTime createdAt;
