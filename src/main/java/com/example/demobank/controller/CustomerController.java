@@ -5,12 +5,14 @@ import com.example.demobank.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("api/v1/customers")
@@ -19,37 +21,40 @@ import java.util.Map;
 public class CustomerController {
     CustomerService customerService;
 
-    @GetMapping("customerId/{id}")
-    public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
-        return ResponseEntity.ok(customerService.getCustomerById(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable(value = "id") Long customerId) {
+        return ResponseEntity.ok(customerService.getCustomerById(customerId));
     }
 
-    @GetMapping("all")
-    public ResponseEntity<?> getCustomers() {
+    @GetMapping
+    public ResponseEntity<List<Customer>> getCustomers() {
         return ResponseEntity.ok(customerService.getCustomers());
     }
 
     @GetMapping("name-surname")
-    public ResponseEntity<?> getCustomerByNameAndSurname(@RequestHeader("Name") String name, @RequestHeader("Surname") String surname) {
-        return ResponseEntity.ok(customerService.findCustomerByNameAndSurname(name, surname));
+    public ResponseEntity<Customer> getCustomerByNameAndSurname(
+            @RequestHeader(value = "Name") String customerName,
+            @RequestHeader(value = "Surname") String customerSurname) {
+        return ResponseEntity.ok(customerService.findCustomerByNameAndSurname(customerName, customerSurname));
     }
 
-    @PostMapping("create")
-    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
-        customer.setActive(1);
+    @PostMapping
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
         customerService.saveCustomer(customer);
-        return new ResponseEntity<>(customer, HttpStatus.CREATED);
+        return new ResponseEntity<>(customer, CREATED);
     }
 
-    @PutMapping("customerId/{id}")
-    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.updateCustomer(id, customer));
+    @PutMapping("/{id}")
+    public ResponseEntity<Customer> updateCustomer(
+            @PathVariable(value = "id") Long customerId,
+            @RequestBody Customer customer) {
+        return ResponseEntity.ok(customerService.updateCustomer(customerId, customer));
     }
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
-        boolean deleted = false;
-        deleted = customerService.deleteCustomerById(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteCustomerById(@PathVariable(value = "id") Long customerId) {
+        boolean deleted;
+        deleted = customerService.deleteCustomerById(customerId);
 
         Map<String, Boolean> map = new HashMap<>();
         map.put("is deleted", deleted);

@@ -32,8 +32,6 @@ public class Customer {
     @Column(unique = true)
     String idNumber;
 
-    Integer active;
-
     @CreationTimestamp
     LocalDateTime createdAt;
 

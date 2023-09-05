@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,13 +20,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomerById(Long id) {
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-
-        if (optionalCustomer.isPresent()) {
-            return optionalCustomer.get();
-        } else {
-            throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
-        }
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id = %s not found!".formatted(id)));
     }
 
     @Override
@@ -42,36 +36,26 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer updateCustomer(Long id, Customer customer) {
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-        if (optionalCustomer.isPresent()) {
-            Customer newCustomer = optionalCustomer.get();
+        Customer newCustomer = getCustomerById(id);
 
-            newCustomer.setName(customer.getName());
-            newCustomer.setSurname(customer.getSurname());
-            newCustomer.setCif(customer.getCif());
-            newCustomer.setIdNumber(customer.getIdNumber());
-            newCustomer.setActive(customer.getActive());
+        newCustomer.setName(customer.getName());
+        newCustomer.setSurname(customer.getSurname());
+        newCustomer.setCif(customer.getCif());
+        newCustomer.setIdNumber(customer.getIdNumber());
 
-            return customerRepository.save(newCustomer);
-        } else {
-            throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
-        }
+        return customerRepository.save(newCustomer);
     }
 
     @Override
     public boolean deleteCustomerById(Long id) {
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-
-        if (optionalCustomer.isPresent()) {
-            customerRepository.deleteById(id);
-            return true;
-        } else {
-            throw new CustomerNotFoundException(String.format("Customer with id %s not found!!!", id));
-        }
+        getCustomerById(id);
+        customerRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public Customer findCustomerByNameAndSurname(String name, String surname) {
-        return customerRepository.findCustomerByNameAndSurname(name, surname);
+        return customerRepository.findCustomerByNameAndSurname(name, surname)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with name =%s and surname =%s not found".formatted(name, surname)));
     }
 }
